@@ -31,5 +31,10 @@ class TestRotasDeleteItemPorId:
         mock_svc.delete_item.return_value = ShoppingItem(id=2, name="carne", quantity=1, purchased= True)
         resp = client.delete("api/items/2")
         assert resp.status_code == 204
-
+        mock_svc.delete_item.assert_called_once()
+        
+    def test_delete_item_nao_existente_por_id(self,mock_svc,client):
+        mock_svc.delete_item.return_value = None
+        resp = client.delete("api/items/90")
+        assert resp.status_code == 404
         mock_svc.delete_item.assert_called_once()
