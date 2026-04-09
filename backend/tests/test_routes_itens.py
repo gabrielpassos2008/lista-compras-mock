@@ -14,5 +14,14 @@ class TestRotasListagemItensPorId:
         }
         mock_svc.get_item.assert_called_once()
         
-
-    
+@patch("app.routes.items.item_service")
+class TestRotasPostCadastroItem:
+    def test_post_cadastrar_item(self, mock_svc, client):
+        mock_svc.create_item.return_value = ShoppingItem(id=1, name="feijão", quantity=2, purchased= True)
+        resp = client.post("api/items")
+        assert resp.status_code == 201
+        assert resp.get_json() == {
+            "id": 1, "name": "feijão", "quantity":2, "purchased": True
+        }
+        mock_svc.create_item.assert_called_once()
+            
