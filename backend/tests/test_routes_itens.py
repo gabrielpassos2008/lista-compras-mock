@@ -51,3 +51,14 @@ class TestRotasDeleteItemPorId:
         resp = client.delete("api/items/90")
         assert resp.status_code == 404
         mock_svc.delete_item.assert_called_once()
+        
+@patch("app.routes.items.item_service")
+class TestRotasPutPorId:
+    def test_put_item_por_id_mock(self, mock_svc, client):
+        mock_svc.update_item.return_value = ShoppingItem(id=1, name="arroz", quantity=10, purchased=True)
+        resp = client.put("api/items/1")
+        assert resp.status_code == 200
+        assert resp.get_json() == {
+            "id":1, "name":"arroz", "quantity":10, "purchased":True
+        }
+        mock_svc.update_item.assert_called_once()
